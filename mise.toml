@@ -1,0 +1,42 @@
+[env]
+# Project information
+PROJECT_NAME = "{{ config_root | basename }}"
+
+# Build directory
+BUILD_DIR = "{{ config_root }}/bin"
+
+[tools]
+go = "1.26.6"
+"go:github.com/go-delve/delve/cmd/dlv" = "latest"
+
+[tasks.build]
+description = "Build"
+run = "go build -o=./bin/${PROJECT_NAME} ./..."
+
+[tasks.test]
+description = "Run all tests"
+run = "go test ./..."
+
+[tasks.test-race]
+description = "Run tests with race detector"
+run = "go test -race ./..."
+
+[tasks.benchmark]
+description = "Run all Benchmark"
+run = "go test -bench=. -benchmem ./..."
+
+[tasks.fmt]
+description = "Format Go source files"
+run = "gofmt -w ."
+
+[tasks.vet]
+description = "Run go vet"
+run = "go vet ./..."
+
+[tasks.check]
+description = "Run formatting, vet, and tests"
+depends = ["fmt", "vet", "test"]
+
+[tasks.run]
+description = "Run the main program"
+run = "go run ./..."
